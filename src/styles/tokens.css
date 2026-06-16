@@ -1,0 +1,164 @@
+/* Design tokens. Dark is :root; light is [data-theme="light"]. Self-hosted
+ * fonts arrive in a follow-up commit; until then, the Google Fonts <link>
+ * in index.html supplies JetBrains Mono.
+ */
+
+/* ───── Dark theme (primary) ───── */
+
+:root {
+  /* Palette — preserved from the existing terminal/BBS theme. */
+  --bg: #050608;
+  --bg-raised: #0b0d11;
+  --bg-sunken: #07090c;
+  --panel-bg: #0d1015;
+  --panel-bg-ok: #0c1410;
+  --panel-bg-err: #150c0d;
+
+  --text: #e6e8eb;
+  --text-muted: #8a8f97;
+  --text-dim: #5a606a;
+
+  --border: #1c2026;
+  --border-strong: #2a2f37;
+
+  /* ANSI-derived accents. */
+  --accent: #5ee0c4;
+  --accent-soft: rgba(94, 224, 196, 0.12);
+  --accent-line: rgba(94, 224, 196, 0.45);
+  --accent-fg: #04140f;             /* foreground when --accent is the bg (e.g., primary button) */
+  --success: #7adf7a;
+  --success-soft: rgba(122, 223, 122, 0.12);
+  --warn: #f3c969;
+  --warn-soft: rgba(243, 201, 105, 0.12);
+  --warn-line: rgba(243, 201, 105, 0.4);
+  --error: #f17c7c;
+  --error-soft: rgba(241, 124, 124, 0.12);
+  --magenta: #d28cf3;               /* secondary accent — carousel headlines, tags */
+  --magenta-soft: rgba(210, 140, 243, 0.12);
+
+  /* Body text on accent backdrops (when accent is large). */
+  --selection-bg: var(--accent);
+  --selection-fg: #04140f;
+
+  /* Scanline overlay tint (RGB tuple so we can vary alpha per theme). */
+  --scanline-rgb: 255, 255, 255;
+  --scanline-alpha: 0.014;
+
+  /* Type stacks. */
+  --sans: "Inter Tight", "Inter", "Noto Sans TC", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", "Sarasa Mono TC", "SF Mono", "IBM Plex Mono", ui-monospace, Consolas, monospace;
+
+  /* Type scale — semantic names. Component CSS should reference these. */
+  --text-display: 44px;             /* result-success "Verified", landing headline */
+  --text-h1: 34px;                  /* per-screen headlines */
+  --text-h2: 24px;                  /* section headers, carousel headlines */
+  --text-body: 19px;                /* body paragraphs */
+  --text-sm: 16px;                  /* status sub-lines, panel rows */
+  --text-mono: 16px;                /* code, hex, status badges */
+  --text-xs: 14px;                  /* footer credits, reason chips */
+  --text-2xs: 13px;                 /* uppercase badges, locale switcher */
+
+  /* Spacing — 4px base grid. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Motion. */
+  --motion-fast: 120ms cubic-bezier(0.2, 0, 0, 1);
+  --motion-base: 200ms cubic-bezier(0.2, 0, 0, 1);
+
+  /* Surface. */
+  --radius: 2px;
+  --gutter: var(--space-8);
+
+  color-scheme: dark;
+}
+
+/* ───── Light theme — darker accent hues for AA contrast on pale bg ───── */
+
+[data-theme="light"] {
+  --bg: #fafafa;
+  --bg-raised: #f5f5f5;
+  --bg-sunken: #ffffff;
+  --panel-bg: #ffffff;
+  --panel-bg-ok: #f0fdf4;
+  --panel-bg-err: #fef2f2;
+
+  --text: #0a0a0a;
+  --text-muted: #525252;
+  --text-dim: #737373;
+
+  --border: #e5e5e5;
+  --border-strong: #d4d4d4;
+
+  --accent: #0d9488;                /* teal-700; ~4.7:1 on #fafafa */
+  --accent-soft: rgba(13, 148, 136, 0.08);
+  --accent-line: rgba(13, 148, 136, 0.35);
+  --accent-fg: #ffffff;
+  --success: #16a34a;
+  --success-soft: rgba(22, 163, 74, 0.08);
+  --warn: #ca8a04;
+  --warn-soft: rgba(202, 138, 4, 0.08);
+  --warn-line: rgba(202, 138, 4, 0.35);
+  --error: #dc2626;
+  --error-soft: rgba(220, 38, 38, 0.08);
+  --magenta: #a21caf;
+  --magenta-soft: rgba(162, 28, 175, 0.08);
+
+  --selection-bg: var(--accent);
+  --selection-fg: #ffffff;
+
+  --scanline-rgb: 0, 0, 0;
+  --scanline-alpha: 0.018;
+
+  color-scheme: light;
+}
+
+/* No-JS / pre-FOUC-script fallback so crawlers and reduced clients still
+ * get the right theme based on the OS preference.
+ */
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg: #fafafa;
+    --bg-raised: #f5f5f5;
+    --bg-sunken: #ffffff;
+    --panel-bg: #ffffff;
+    --panel-bg-ok: #f0fdf4;
+    --panel-bg-err: #fef2f2;
+
+    --text: #0a0a0a;
+    --text-muted: #525252;
+    --text-dim: #737373;
+
+    --border: #e5e5e5;
+    --border-strong: #d4d4d4;
+
+    --accent: #0d9488;
+    --accent-soft: rgba(13, 148, 136, 0.08);
+    --accent-line: rgba(13, 148, 136, 0.35);
+    --accent-fg: #ffffff;
+    --success: #16a34a;
+    --success-soft: rgba(22, 163, 74, 0.08);
+    --warn: #ca8a04;
+    --warn-soft: rgba(202, 138, 4, 0.08);
+    --warn-line: rgba(202, 138, 4, 0.35);
+    --error: #dc2626;
+    --error-soft: rgba(220, 38, 38, 0.08);
+    --magenta: #a21caf;
+    --magenta-soft: rgba(162, 28, 175, 0.08);
+
+    --selection-bg: var(--accent);
+    --selection-fg: #ffffff;
+
+    --scanline-rgb: 0, 0, 0;
+    --scanline-alpha: 0.018;
+
+    color-scheme: light;
+  }
+}

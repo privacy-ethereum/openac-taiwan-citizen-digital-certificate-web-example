@@ -1,0 +1,28 @@
+{
+  "name": "openac-taiwan-citizen-digital-certificate-web-example",
+  "private": true,
+  "version": "0.0.1.1",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm fetch:assets && vite",
+    "build": "pnpm fetch:assets && vite build && tsc --noEmit",
+    "fetch:assets": "node scripts/fetch-assets.mjs",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "fake-indexeddb": "^6.2.5",
+    "happy-dom": "^20.9.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.9",
+    "vitest": "^4.1.4"
+  },
+  "dependencies": {
+    "@noble/hashes": "^2.2.0",
+    "nanostores": "^1.3.0",
+    "qrcode-generator": "^2.0.4"
+  }
+}

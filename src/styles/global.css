@@ -1,0 +1,108 @@
+/* Resets, base type, scanlines, ::selection, reduced-motion. Component
+ * styles stay in style.css (per-component split is a follow-up).
+ */
+
+* {
+  box-sizing: border-box;
+  /* Mobile: kill the default grey tap flash; buttons own their own pressed state. */
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--text);
+  font: 18px/1.65 var(--mono);
+  /* Safety net against rogue long mono strings on narrow viewports. */
+  overflow-x: hidden;
+}
+
+/* RGB tuple lives in tokens.css so light theme inverts to a faint
+ * dark-on-light pattern instead of black-on-pale.
+ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(var(--scanline-rgb), var(--scanline-alpha)) 0,
+    rgba(var(--scanline-rgb), var(--scanline-alpha)) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 1;
+}
+
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-fg);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+h1 {
+  margin: 0;
+  font: 600 var(--text-display)/1.18 var(--sans);
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+h1::before {
+  content: "// ";
+  color: var(--accent);
+  font-family: var(--mono);
+  font-weight: 500;
+}
+
+p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+/* Prevent horizontal scroll on small screens when a long hex value renders. */
+.mono,
+code {
+  font-family: var(--mono);
+  overflow-wrap: anywhere;
+}
+
+/* Mobile-first input safeguard: iOS Safari zooms the viewport on focus if an
+ * input renders below 16px, permanently shifting the layout. Floor every
+ * text-style input at 16px. Designers wanting smaller numerals should use
+ * `transform: scale(...)` instead of font-size. */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+textarea {
+  font-size: max(16px, 1rem);
+}
+
+/* Disables decorative animation only; task-relevant motion (mono spinner)
+ * opts back in inside its own rules.
+ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.35;
+  }
+}
