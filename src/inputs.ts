@@ -6,7 +6,7 @@
 // check that prevents `__placeholder__` witness failures from returning
 // through input-builder drift.
 
-import init, { build_split_inputs } from "./wasm/spartan2_wasm.js";
+import { init, build_split_inputs } from "openac-rsa-x509";
 import type { CardContext } from "./pipeline";
 import type { SmtCircuitInputs } from "./smt-client";
 

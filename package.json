@@ -23,6 +23,7 @@
   "dependencies": {
     "@noble/hashes": "^2.2.0",
     "nanostores": "^1.3.0",
+    "openac-rsa-x509": "github:privacy-ethereum/openac-rsa-x509-js",
     "qrcode-generator": "^2.0.4"
   }
 }

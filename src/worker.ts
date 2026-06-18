@@ -1,11 +1,6 @@
 // Dedicated Worker for warmup and proving phases.
 
-import init, {
-  CircuitKind,
-  initThreadPool,
-  load_pk,
-  prove,
-} from "./wasm/spartan2_wasm.js";
+import { init, CircuitKind, initThreadPool, load_pk, prove } from "openac-rsa-x509";
 
 import { ensureAsset } from "./asset-download";
 import { assetStore } from "./asset-store";
@@ -118,11 +113,15 @@ export type Progress =
       manifestCode?: "rate_limited" | "unreachable" | "malformed" | "missing_asset";
     };
 
-const KIND_ENUM: Record<Kind, CircuitKind> = {
-  certChainRS2048: CircuitKind.CertChainRs2048,
-  certChainRS4096: CircuitKind.CertChainRs4096,
-  userSigRS2048: CircuitKind.UserSigRs2048,
-};
+// Resolved lazily after init() so the CircuitKind Proxy is only accessed
+// once the wasm module is loaded.
+function kindEnum(): Record<Kind, number> {
+  return {
+    certChainRS2048: (CircuitKind as Record<string, number>).CertChainRs2048,
+    certChainRS4096: (CircuitKind as Record<string, number>).CertChainRs4096,
+    userSigRS2048: (CircuitKind as Record<string, number>).UserSigRs2048,
+  };
+}
 
 const KIND_LABEL: Record<Kind, string> = {
   certChainRS2048: "certChainRS2048",
@@ -414,7 +413,7 @@ async function runWarmup(
       if (cancelled) return;
       post({ step: "warmup", status: "in_progress", phase: "load", kind });
       phase = `pk_load/${kind}`;
-      load_pk(KIND_ENUM[kind], pkBytes);
+      load_pk(kindEnum()[kind], pkBytes);
     }
 
     phase = "wgen_drain_final";
@@ -533,7 +532,7 @@ async function runProve(inputs: ProveInput): Promise<void> {
 
     post({ step: "prove", status: "in_progress", kind: certKind, phase: "prep" });
     const certProveStart = performance.now();
-    const certProofOut = prove(KIND_ENUM[certKind], certWtns) as {
+    const certProofOut = prove(kindEnum()[certKind], certWtns) as {
       proof: ArrayLike<number>;
     };
     const certProveMs = performance.now() - certProveStart;
@@ -562,7 +561,7 @@ async function runProve(inputs: ProveInput): Promise<void> {
       phase: "prep",
     });
     const userSigProveStart = performance.now();
-    const userSigProofOut = prove(KIND_ENUM["userSigRS2048"], userSigWtns) as {
+    const userSigProofOut = prove(kindEnum()["userSigRS2048"], userSigWtns) as {
       proof: ArrayLike<number>;
     };
     const userSigProveMs = performance.now() - userSigProveStart;

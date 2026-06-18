@@ -2,7 +2,7 @@
 // Returns `ProveInput` for handoff to `/prove`, where proving runs in a
 // cross-origin-isolated Worker.
 
-import { cert_modulus_bits, cert_serial_hex } from "./wasm/spartan2_wasm.js";
+import { cert_modulus_bits, cert_serial_hex } from "openac-rsa-x509";
 
 import type { AuthProvider } from "./auth-method";
 import { appIdToBytes, base64ToBytes } from "./bytes";
